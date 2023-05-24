@@ -31,7 +31,6 @@ Detalhamento das Migrations
 Usuário (users):
 - Padrão do Laravel
 
-(os campos serão em inglês, dont't worry)
 Tarefa (tasks):
 - id
 - title

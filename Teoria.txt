@@ -1,0 +1,142 @@
+############# Models e Relacionamentos #############
+
+********** Relacionamento 1 x N **********
+[
+    [ Categoria ] ----------------------- [ Tarefa ]
+    (1, 1)                              (0, N)
+
+    (1, 1) -> Uma Tarefa possui 1 e somente 1 Categoria
+    (0, N) -> Uma Categoria possui 0 ou N Tarefas
+]
+
+********** Comando p/ criar a model **********
+[
+    php artisan make:model Category
+    php artisan make:model Task
+]
+
+********** Criando relação nas models **********
+[
+    Model: Category
+    Método:
+        public function tasks()
+        {
+            return $this->hasMany(Task::class);
+        }
+    Tradução: hasMany = tem muitos
+
+    Model: Task
+    Método:
+        public function category()
+        {
+            return $this->belongsTo(Category::class);
+        }
+    Tradução: belongsTo = pertence a
+]
+
+############# Iniciando Projeto já com Dados no Banco #############
+
+********** Seeders **********
+
+***** Comandos usados *****
+[
+    php artisan make:seeder CategorySeeder
+    php artisan make:seeder TaskSeeder
+
+    outros:
+    php artisan migrate:fresh -> apaga o banco e gera de novo
+    php artisan db:seed -> roda as seeders configuradas em DatabaseSeeder
+    php artisan make:seeder CategorySeeder -> roda uma seeder específica
+]
+
+***** Configurando as Seeders *****
+[
+    Seeder: User
+    Método:
+        public function run()
+        {
+            User::create([
+                'name' => 'Chandler M. Bing',
+                'email' => 'clandleremonica@gmail.com',
+                'password' => Hash::make('123456')
+            ]);
+        }
+
+    Seeder: Category
+    Método:
+        public function run()
+        {
+            Category::create([
+                'title' => 'Categoria de exemplo',
+                'color' => '#ff0000',
+                'user_id' => 1
+            ]);
+        }
+
+    Seeder: Task
+    Método:
+        public function run()
+        {
+            Task::create([
+                'title' => 'Minha Task de Exemplo',
+                'description' => 'hahsuhasuhs',
+                'due_date' => '2022-12-12 00:00:00',
+                'user_id' => 1,
+                'category_id' => 1,
+            ]);
+        }
+
+    Lembrete: importar as devidas models em cada seeder
+
+    Seeder: DatabaseSeeder
+    Método:
+        public function run()
+        {
+            $this->call([
+                UserSeeder::class,
+                CategorySeeder::class,
+                TaskSeeder::class,
+            ]);
+        }
+
+    Conclussão: Isso irá gerar um Usuário, uma Categoria e uma Tarefa
+]
+
+********** Factories **********
+
+***** Ideia Geral *****
+[
+    Criar mais de uma Categoria, Tarefa ou Usuário de uma maneira mais prática
+    "Fábrica de Dados"
+]
+
+***** Comandos usados *****
+[
+    php artisan make:factory CategoryFactory
+]
+
+***** Configurando as Factories *****
+[
+    Factory: CategoryFactory
+    Método:
+        public function definition()
+        {
+            return [
+                'title' => fake()->text(30),
+                'color' => fake()->safeHexColor(),
+                'user_id' => 1
+            ];
+        }
+
+    Seeder: DatabaseSeeder
+    Método:
+        public function run()
+        {
+            $this->call([
+                UserSeeder::class,
+            ]);
+
+            //gera 5 categorias
+            Category::factory(5)->create();
+        }
+]

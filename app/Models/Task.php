@@ -25,7 +25,7 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    //Tarefa possui a uma única categoria
+    //Tarefa possui uma única categoria
     public function category()
     {
         return $this->belongsTo(Category::class);
