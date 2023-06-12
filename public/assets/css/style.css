@@ -118,10 +118,6 @@ section.list {
     display: flex;
 }
 
-.list_header_select {
-
-}
-
 .task_list {
     display: flex;
     flex-direction: column;
